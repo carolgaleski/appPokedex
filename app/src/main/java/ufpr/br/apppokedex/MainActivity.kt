@@ -38,8 +38,8 @@ class MainActivity : AppCompatActivity() {
         val endpoint  = retrofitClient.create(Endpoint::class.java)
 
         val loginData = LoginRequest(
-            user = etLogin.text.toString(),
-            password = etSenha.text.toString()
+            user = etLogin.text.toString().trim(),
+            password = etSenha.text.toString().trim()
         )
 
         val callback = endpoint.auth(loginData)
@@ -53,10 +53,15 @@ class MainActivity : AppCompatActivity() {
 
                     val usuario = response.body()!!
 
+                    val sharedPref  = getSharedPreferences("AppPokedexPrefs", MODE_PRIVATE)
+                    with(sharedPref.edit()) {
+                        putString("usuarioLogado", etLogin.text.toString())
+                        putString("nomeUsuario", usuario.nome)
+                        putString("emailUsuario", usuario.email)
+                        apply()
+                    }
+
                     val intent = Intent(this@MainActivity, DashboardActivity::class.java)
-                    intent.putExtra("nome", usuario.nome)
-                    intent.putExtra("email", usuario.email)
-                    intent.putExtra("id", usuario.id)
                     startActivity(intent)
                     finish()
 

@@ -11,11 +11,33 @@
     android:padding="24dp"
     tools:context=".DashboardActivity">
 
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#C00000"
+        android:title="Dashboard"
+        android:titleTextColor="#FFFFFF"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+<!--
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="235dp"
         android:layout_height="85dp"
         app:srcCompat="@drawable/dashboardfonte" />
+-->
+
+    <TextView
+        android:id="@+id/tvUserNome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bem vindo, Usuário"
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp"
+        android:textColor="#000000"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,10 +72,10 @@
             android:id="@+id/top3habilidades"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Top 3 Habilidades: Nenhuma"
-            android:textSize="18sp"
             android:layout_marginBottom="16dp"
-            android:textColor="#000000"/>
+            android:text="Top 3 Habilidades: Nenhuma"
+            android:textColor="#000000"
+            android:textSize="18sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listaPokemon"
@@ -63,17 +85,6 @@
 
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/botaoSair"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="#3F51D7"
-        android:fontFamily="monospace"
-        android:text="Sair"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold" />
 
 
 </LinearLayout>
