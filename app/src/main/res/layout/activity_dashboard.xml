@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#DA0A2D"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="24dp"
+    tools:context=".DashboardActivity">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="235dp"
+        android:layout_height="85dp"
+        app:srcCompat="@drawable/dashboardfonte" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="@drawable/quadro_branco"
+    android:elevation="4dp">
+
+
+
+        <TextView
+            android:id="@+id/totalPokemon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pokémons Cadastrados: 0"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/top3tipos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Top 3 Tipos: Nenhum"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/top3habilidades"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Top 3 Habilidades: Nenhuma"
+            android:textSize="18sp"
+            android:layout_marginBottom="16dp"
+            android:textColor="#000000"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listaPokemon"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scrollbars="vertical"/>
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/botaoSair"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#3F51D7"
+        android:fontFamily="monospace"
+        android:text="Sair"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+
+</LinearLayout>
