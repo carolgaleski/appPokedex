@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,12 +30,24 @@ class MainActivity : AppCompatActivity() {
         botaoLogin = findViewById(R.id.botaoLogin)
 
         botaoLogin.setOnClickListener { login() }
-
     }
 
-    fun login() {
-        val retrofitClient  = NetworkUtils.getRetrofitInstance("https://render-api-eqmo.onrender.com/")
-        val endpoint  = retrofitClient.create(Endpoint::class.java)
+    private fun mostrarAlerta(titulo: String, mensagem: String, onOk: (() -> Unit)? = null) {
+
+        runOnUiThread {
+            val builder = AlertDialog.Builder(this)
+                .setTitle(titulo)
+                .setMessage(mensagem)
+                .setPositiveButton("OK") { _, _ ->
+                    onOk?.invoke()
+                }
+            builder.show()
+        }
+    }
+
+    private fun login() {
+        val retrofitClient = NetworkUtils.getRetrofitInstance("https://render-api-eqmo.onrender.com/")
+        val endpoint = retrofitClient.create(Endpoint::class.java)
 
         val loginData = LoginRequest(
             user = etLogin.text.toString().trim(),
@@ -44,16 +56,13 @@ class MainActivity : AppCompatActivity() {
 
         val callback = endpoint.auth(loginData)
 
-        callback.enqueue(object  : Callback<Usuario> {
-            override fun onResponse(
-                call: Call<Usuario>,
-                response: Response<Usuario>
-            ) {
-                if (response.isSuccessful && response.body()  != null) {
+        callback.enqueue(object : Callback<Usuario> {
+            override fun onResponse(call: Call<Usuario>, response: Response<Usuario>) {
+                if (response.isSuccessful && response.body() != null) {
 
                     val usuario = response.body()!!
 
-                    val sharedPref  = getSharedPreferences("AppPokedexPrefs", MODE_PRIVATE)
+                    val sharedPref = getSharedPreferences("AppPokedexPrefs", MODE_PRIVATE)
                     with(sharedPref.edit()) {
                         putString("usuarioLogado", etLogin.text.toString())
                         putString("nomeUsuario", usuario.nome)
@@ -65,22 +74,20 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
 
-                }  else {
-                    Toast.makeText(
-                        baseContext,
-                        "Login ou senha incorretos",
-                        Toast.LENGTH_LONG
-                    ).show()
+                } else {
+                    mostrarAlerta(
+                        titulo = "Erro",
+                        mensagem = "Login ou senha incorretos"
+                    )
                 }
             }
 
-            override fun onFailure(
-                call: Call<Usuario>,
-                t: Throwable
-            ) {
-                Toast.makeText(baseContext, "Erro na conexão: ${t.message}", Toast.LENGTH_LONG).show()
+            override fun onFailure(call: Call<Usuario>, t: Throwable) {
+                mostrarAlerta(
+                    titulo = "Erro de conexão",
+                    mensagem = "Não foi possível conectar: ${t.message}"
+                )
             }
-
         })
     }
 }

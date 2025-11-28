@@ -5,71 +5,80 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DA0A2D"
+    android:background="#F6A9A9"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="24dp"
     tools:context=".MainActivity">
 
+    <!-- Logo -->
+
+    <!-- CardView do Login -->
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="235dp"
         android:layout_height="85dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.525"
+        android:layout_marginBottom="24dp"
         app:srcCompat="@drawable/pokedexlogo" />
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="319dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/quadro_branco"
-        android:elevation="4dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#FFFFFF"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="monospace"
-            android:text="Faça o login"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp">
 
-        <EditText
-            android:id="@+id/etLogin"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="24dp"
-            android:fontFamily="monospace"
-            android:hint="Usuário"
-            android:inputType="textEmailAddress"
-            android:padding="12dp" />
+            <!-- Título -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:fontFamily="monospace"
+                android:text="Faça o login"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/etSenha"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="24dp"
-            android:fontFamily="monospace"
-            android:hint="Senha"
-            android:inputType="textPassword"
-            android:padding="12dp" />
+            <!-- Campo de usuário -->
+            <EditText
+                android:id="@+id/etLogin"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="monospace"
+                android:hint="Usuário"
+                android:inputType="textEmailAddress"
+                android:padding="12dp" />
 
-        <Button
-            android:id="@+id/botaoLogin"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:backgroundTint="#3F51D7"
-            android:fontFamily="monospace"
-            android:text="Entrar"
-            android:textColor="#F4F0F0" />
+            <!-- Campo de senha -->
+            <EditText
+                android:id="@+id/etSenha"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="24dp"
+                android:fontFamily="monospace"
+                android:hint="Senha"
+                android:inputType="textPassword"
+                android:padding="12dp" />
 
-    </LinearLayout>
+            <!-- Botão de login -->
+            <Button
+                android:id="@+id/botaoLogin"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:backgroundTint="#C33C3C"
+                android:fontFamily="monospace"
+                android:text="Entrar"
+                android:textColor="#F4F0F0" />
 
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

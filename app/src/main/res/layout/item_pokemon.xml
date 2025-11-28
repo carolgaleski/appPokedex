@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="#FFFFFF"
+    android:visibility="visible"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="6dp"
+    tools:visibility="visible">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvNome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="monospace"
+                android:text="Nome"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="normal" />
+
+            <TextView
+                android:id="@+id/tvTipo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:fontFamily="monospace"
+                android:text="Tipo: "
+                android:textColor="#333333" />
+
+            <TextView
+                android:id="@+id/tvHabilidades"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:text="Habilidades: "
+                android:textColor="#333333" />
+
+            <TextView
+                android:id="@+id/tvUsuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cadastrado por: "
+                android:textColor="#555555"
+                android:layout_marginTop="4dp"
+                android:fontFamily="monospace"
+                android:textSize="14sp"/>
+
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnEditar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:backgroundTint="#2196F3"
+            android:contentDescription="Editar Pokémon"
+            android:src="@android:drawable/ic_menu_manage" />
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="0dp" />
+
+        <ImageButton
+            android:id="@+id/btnExcluir"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:backgroundTint="#230F0F"
+            android:backgroundTintMode="src_in"
+            android:contentDescription="Excluir Pokémon"
+            android:outlineAmbientShadowColor="#0F0D0D"
+            android:outlineSpotShadowColor="#100E0E"
+            android:src="@android:drawable/ic_menu_delete"
+            android:visibility="visible"
+            app:tint="#EF1111" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

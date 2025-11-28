@@ -6,15 +6,17 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
-import android.widget.Button
-import kotlin.system.exitProcess
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlin.system.exitProcess
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ufpr.br.apppokedex.api.Endpoint
+import ufpr.br.apppokedex.model.Pokemon
 import ufpr.br.apppokedex.util.NetworkUtils
-
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -24,15 +26,15 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var top3habilidades: TextView
     private lateinit var listaPokemon: RecyclerView
 
-
     private var usuarioLogado: String = ""
     private var nomeUsuario: String = "Usuário"
+
+    private lateinit var adapter: PokemonAdapter
 
     private val cadastroPokemonLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
-            // atualiza a lista e outros itens
             carregarPokemon()
         }
     }
@@ -49,20 +51,18 @@ class DashboardActivity : AppCompatActivity() {
 
         listaPokemon.layoutManager = LinearLayoutManager(this)
 
+        // pra não perder as prefs. do user
         val sharedPref = getSharedPreferences("AppPokedexPrefs", MODE_PRIVATE)
-        usuarioLogado =  sharedPref.getString("usuarioLogado", "").orEmpty()
+        usuarioLogado = sharedPref.getString("usuarioLogado", "").orEmpty()
         nomeUsuario = sharedPref.getString("nomeUsuario", "Usuário").orEmpty()
-
-        tvUserNome.text = "Bem vindo, $nomeUsuario"
+        tvUserNome.text = "Bem-vindo, $nomeUsuario"
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        /*val botaoSair = findViewById<Button>(R.id.botaoSair)
-        botaoSair.setOnClickListener {
-            finishAffinity()   // fecha todas as activities do app
-            exitProcess(0)
-        }*/
+        //pokemon adapter com a lista vazia
+        adapter = PokemonAdapter(mutableListOf())
+        listaPokemon.adapter = adapter
     }
 
     override fun onResume() {
@@ -76,25 +76,50 @@ class DashboardActivity : AppCompatActivity() {
         val retrofit = NetworkUtils.getRetrofitInstance("https://render-api-eqmo.onrender.com/")
         val endpoint = retrofit.create(Endpoint::class.java)
 
-/*        val call = endpoint.listarPokemons(usuarioLogado)
-        call.enqueue(object : Callback<List<Pokemon>> {
-            override fun onResponse(call: Call<List<Pokemon>>, response: Response<List<Pokemon>>) {
-                if (response.isSuccessful && response.body() != null) {
-                    val lista = response.body()!!
-                    totalPokemon.text = "Pokémons Cadastrados: ${lista.size}"
+        endpoint.listarPokemons(usuarioLogado)
+            .enqueue(object : Callback<List<Pokemon>> {
+                override fun onResponse(call: Call<List<Pokemon>>, response: Response<List<Pokemon>>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val lista = response.body()!!
 
+                        // atualiza o total
+                        totalPokemon.text = "Pokémon cadastrados: ${lista.size}"
 
-                    // listaPokemon.adapter = PokemonAdapter(lista)
-                } else {
-                    totalPokemon.text = "Pokémons Cadastrados: 0"
+                        adapter.updateList(lista)
+
+                        // exibição do top 3 tipos
+                        val tiposCount = lista.groupingBy { it.tipo }.eachCount()
+                        val topTipos = tiposCount.entries
+                            .sortedByDescending { it.value }
+                            .take(3)
+                            .joinToString(", ") { it.key }
+                        top3tipos.text = if (topTipos.isNotEmpty()) "Top 3 tipos: $topTipos" else "Top 3 tipos: Nenhum"
+
+                        // exibição top 3 habilidades
+                        val habilidadesCount = lista.flatMap { it.habilidades }
+                            .groupingBy { it }
+                            .eachCount()
+                        val topHabilidades = habilidadesCount.entries
+                            .sortedByDescending { it.value }
+                            .take(3)
+                            .joinToString(", ") { it.key }
+                        top3habilidades.text = if (topHabilidades.isNotEmpty()) "Top 3 habilidades: $topHabilidades" else "Top 3 habilidades: Nenhuma"
+
+                    } else {
+                        totalPokemon.text = "Pokemon cadastrados: 0"
+                        adapter.updateList(emptyList())
+                        top3tipos.text = "Top 3 tipos: nenhum"
+                        top3habilidades.text = "Top 3 habilidades: nenhuma"
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<List<Pokemon>>, t: Throwable) {
-                totalPokemon.text = "Pokémons Cadastrados: 0"
-            }
-        })
-    }*/
+                override fun onFailure(call: Call<List<Pokemon>>, t: Throwable) {
+                    totalPokemon.text = "Pokemon cadastrados: 0"
+                    adapter.updateList(emptyList())
+                    top3tipos.text = "Top 3 tipos: nenhum"
+                    top3habilidades.text = "Top 3 habilidades: nenhuma"
+                }
+            })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -104,29 +129,15 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menuNovo -> {
-                val intent = Intent(this, CadastroPokemonActivity::class.java)
-                cadastroPokemonLauncher.launch(intent)
-            }
-
-            R.id.menuListar -> {
-                startActivity(Intent(this, ListarPokemonActivity::class.java))
-            }
-
-            R.id.menuPesquisarTipo -> {
-                startActivity(Intent(this, PesquisarTipoActivity::class.java))
-            }
-
-            R.id.menuPesquisarHab -> {
-                startActivity(Intent(this, PesquisarHabilidadeActivity::class.java))
-            }
-
+            R.id.menuNovo -> cadastroPokemonLauncher.launch(Intent(this, CadastroPokemonActivity::class.java))
+            R.id.menuListar -> startActivity(Intent(this, ListarPokemonActivity::class.java))
+            R.id.menuPesquisarTipo -> startActivity(Intent(this, PesquisarTipoActivity::class.java))
+            R.id.menuPesquisarHab -> startActivity(Intent(this, PesquisarHabilidadeActivity::class.java))
             R.id.menuSair -> {
                 finishAffinity()
                 exitProcess(0)
             }
         }
-
         return super.onOptionsItemSelected(item)
     }
 }

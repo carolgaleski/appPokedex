@@ -3,8 +3,13 @@ package ufpr.br.apppokedex.api
 import ufpr.br.apppokedex.model.Usuario
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Query
+import ufpr.br.apppokedex.model.Pokemon
 import ufpr.br.apppokedex.model.PokemonRequest
 import ufpr.br.apppokedex.model.PokemonResponse
 
@@ -20,4 +25,17 @@ interface Endpoint {
     @Headers("Content-Type: application/json")
     @POST("/pokemon/create")
     fun cadastrarPokemon(@Body request: PokemonRequest): Call<PokemonResponse>
+
+    @GET("/pokemon/listar")
+    fun listarPokemons(
+        @Query("usuario") usuario: String
+    ): Call<List<Pokemon>>
+
+    @PUT("/pokemon/editar")
+    fun editarPokemon(@Body pokemon: Pokemon): Call<PokemonResponse>
+
+    @DELETE("/pokemon/excluir")
+    fun excluirPokemon(@Query("id") id: Int): Call<PokemonResponse>
+
+
 }

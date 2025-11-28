@@ -5,13 +5,13 @@
         android:title="Cadastrar Pokémon"/>
 
     <item android:id="@+id/menuListar"
-        android:title="Listar Todos"/>
+        android:title="Gerenciar Pokémon"/>
 
     <item android:id="@+id/menuPesquisarTipo"
-        android:title="Pesquisar por Tipo"/>
+        android:title="Pesquisar por tipo"/>
 
     <item android:id="@+id/menuPesquisarHab"
-        android:title="Pesquisar por Habilidade"/>
+        android:title="Pesquisar por habilidade"/>
 
     <item android:id="@+id/menuSair"
         android:title="Sair"/>
